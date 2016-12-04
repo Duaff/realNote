@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.note.dao.UserDao">
+	<select id="findByName" parameterType="string" resultType="com.note.entity.User">
+		SELECT * FROM `cn_user` where cn_user_name=#{name};
+	</select>
+
+	<select id="findById" parameterType="string"
+		resultType="com.note.entity.User">
+		select * from cn_user
+		where cn_user_id=#{id}
+	</select>
+	
+	<select id="findByIf" parameterType="com.note.entity.UserTest" resultType="com.note.entity.User">
+		select * from cn_user 
+		<where>
+			<if test="cn_user_id !=null">
+				cn_user_id=#{cn_user_id}
+			</if>
+			<choose>
+				<when test="cn_user_desc != null">
+					or cn_user_desc=#{cn_user_desc}
+				</when>
+				<!-- <when test="cn_user_desc = '1' ">
+					OR cn_user_desc=#{cn_user_desc}
+				</when> -->
+			</choose>
+		</where>
+	</select>
+
+	<update id="updateToken" parameterType="map">
+		update cn_user set
+		cn_user_token=#{token} where cn_user_id=#{userId}
+	</update>
+
+	<insert id="insert" parameterType="com.note.entity.User">
+		insert into cn_user
+		(
+		cn_user_id,
+		cn_user_name,
+		cn_user_password,
+		cn_user_token,
+		cn_user_desc
+		)
+		values
+		(
+		#{cn_user_id},
+		#{cn_user_name},
+		#{cn_user_password},
+		#{cn_user_token},
+		#{cn_user_desc}
+		)
+	</insert>
+</mapper>
